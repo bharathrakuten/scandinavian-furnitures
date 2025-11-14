@@ -1,6 +1,14 @@
 # Bharath Krishna - Personal Profile
 
+![React](https://img.shields.io/badge/React-18.2.0-blue?logo=react)
+![Vite](https://img.shields.io/badge/Vite-5.0.8-646CFF?logo=vite)
+![License](https://img.shields.io/badge/License-MIT-green)
+
 A modern, responsive personal profile website showcasing MLOps and Kubernetes engineering expertise.
+
+## Live Demo
+
+Visit the live website to see the profile in action!
 
 ## Features
 
@@ -135,6 +143,15 @@ Theme colors are defined in `src/index.css` using CSS custom properties. Modify 
 - Firefox (latest)
 - Safari (latest)
 - Edge (latest)
+
+## Deployment
+
+The application can be deployed to various platforms:
+
+- **Vercel**: `npm run build` then deploy the `dist/` folder
+- **Netlify**: Connect your repository and set build command to `npm run build`
+- **GitHub Pages**: Use `gh-pages` branch to deploy the `dist/` folder
+- **Docker**: Containerize the application for cloud deployment
 
 ## License
 
