@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import './App.css'
-import Header from './components/Header'
-import About from './components/About'
-import Skills from './components/Skills'
-import Experience from './components/Experience'
-import Projects from './components/Projects'
-import Contact from './components/Contact'
+import { AuthProvider } from './context/AuthContext'
+import ProtectedRoute from './components/ProtectedRoute'
+import SignIn from './components/SignIn'
+import Portfolio from './components/Portfolio'
 
 function App() {
   const [theme, setTheme] = useState('light')
@@ -24,19 +23,22 @@ function App() {
   }
 
   return (
-    <div className="app">
-      <Header theme={theme} toggleTheme={toggleTheme} />
-      <main className="main-content">
-        <About />
-        <Skills />
-        <Experience />
-        <Projects />
-        <Contact />
-      </main>
-      <footer className="footer">
-        <p>&copy; 2025 Bharath Krishna. All rights reserved.</p>
-      </footer>
-    </div>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/signin" element={<SignIn />} />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Portfolio theme={theme} toggleTheme={toggleTheme} />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   )
 }
 
