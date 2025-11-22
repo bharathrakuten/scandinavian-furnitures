@@ -1,203 +1,225 @@
 # Bharath Krishna - Personal Profile
 
-A modern, responsive personal profile website showcasing MLOps and Kubernetes engineering expertise.
+A modern, responsive personal profile website showcasing MLOps and Kubernetes engineering expertise, built with Next.js 15, TypeScript, and shadcn/ui.
 
 ## Features
 
-- **Google Single Sign-On (SSO)**: Secure authentication with Google accounts
+- **Google Single Sign-On (SSO)**: Secure authentication with NextAuth.js
 - **Protected Routes**: Content accessible only to authenticated users
-- **Modern React Application**: Built with React 18 and Vite for optimal performance
-- **Dark/Light Mode**: Toggle between themes with persistent preference storage
+- **Modern Next.js 15**: Built with App Router and React Server Components
+- **TypeScript**: Full type safety throughout the application
+- **shadcn/ui Components**: Beautiful, accessible UI components
+- **Dark/Light Mode**: Toggle between themes with persistent preference
 - **Responsive Design**: Fully responsive layout that works on all devices
-- **Smooth Animations**: Professional animations and transitions throughout
-- **Optimized Performance**: Fast loading with Vite's optimized build system
+- **Optimized Performance**: Server-side rendering and automatic code splitting
 
 ## Tech Stack
 
-- **Framework**: React 18
-- **Build Tool**: Vite 5
-- **Authentication**: Firebase Authentication with Google SSO
-- **Routing**: React Router DOM v6
-- **Styling**: CSS with CSS Custom Properties (CSS Variables)
-- **Theme**: Light/Dark mode support
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript 5.6
+- **Authentication**: NextAuth.js v5 (Auth.js) with Google OAuth
+- **UI Components**: shadcn/ui built on Radix UI
+- **Styling**: Tailwind CSS v3.4
+- **Theme**: next-themes for dark/light mode
+- **Deployment**: Vercel (optimized)
 
 ## Project Structure
 
 ```
 ├── .env.example            # Environment variables template
-├── index.html              # Entry HTML file
-├── package.json            # Project dependencies
-├── vite.config.js          # Vite configuration
-└── src/
-    ├── main.jsx            # Application entry point
-    ├── App.jsx             # Main application component with routing
-    ├── App.css             # Application styles
-    ├── index.css           # Global styles and theme variables
-    ├── firebase/
-    │   └── config.js       # Firebase configuration and initialization
-    ├── context/
-    │   └── AuthContext.jsx # Authentication context provider
-    └── components/
-        ├── Header.jsx      # Navigation header with auth status & logout
-        ├── SignIn.jsx      # Google Sign-In page
-        ├── ProtectedRoute.jsx # Route guard for authenticated access
-        ├── Portfolio.jsx   # Main portfolio layout
-        ├── About.jsx       # About section
-        ├── Skills.jsx      # Technical skills showcase
-        ├── Experience.jsx  # Professional experience timeline
-        ├── Projects.jsx    # Featured projects
-        ├── Contact.jsx     # Contact information
-        └── *.css           # Component-specific styles
+├── app/
+│   ├── layout.tsx          # Root layout with providers
+│   ├── page.tsx            # Home page (protected)
+│   ├── signin/
+│   │   └── page.tsx        # Google Sign-In page
+│   ├── api/
+│   │   └── auth/
+│   │       └── [...nextauth]/
+│   │           └── route.ts # NextAuth API handler
+│   └── globals.css         # Global styles with theme variables
+├── components/
+│   ├── ui/                 # shadcn/ui components
+│   │   ├── button.tsx
+│   │   ├── card.tsx
+│   │   ├── avatar.tsx
+│   │   └── badge.tsx
+│   ├── theme-provider.tsx  # Theme provider component
+│   ├── theme-toggle.tsx    # Theme toggle button
+│   ├── Header.tsx          # Navigation with auth status
+│   ├── About.tsx           # About section
+│   ├── Skills.tsx          # Skills showcase
+│   ├── Experience.tsx      # Experience timeline
+│   ├── Projects.tsx        # Projects showcase
+│   └── Contact.tsx         # Contact information
+├── lib/
+│   └── utils.ts            # Utility functions
+├── auth.ts                 # NextAuth configuration
+├── auth.config.ts          # Edge-compatible auth config
+├── middleware.ts           # Route protection middleware
+├── next.config.ts          # Next.js configuration
+├── tailwind.config.ts      # Tailwind CSS configuration
+└── tsconfig.json           # TypeScript configuration
 ```
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js (version 16 or higher)
-- npm or yarn
+- Node.js 18+ or higher
+- npm, yarn, or pnpm
+- Google Cloud Platform account (for OAuth credentials)
 
 ### Installation
 
-1. Clone the repository:
-```bash
-git clone <repository-url>
-cd scandinavian-furnitures
-```
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Set up Firebase Authentication:
-
-   a. Create a Firebase project at [Firebase Console](https://console.firebase.google.com/)
-
-   b. Enable Google Sign-In:
-      - Go to **Authentication** > **Sign-in method**
-      - Enable **Google** as a sign-in provider
-      - Add your domain to the authorized domains list
-
-   c. Get your Firebase configuration:
-      - Go to **Project Settings** > **General**
-      - Scroll down to **Your apps** section
-      - Click on the web app (</>) icon to create a web app
-      - Copy the Firebase configuration values
-
-   d. Create a `.env` file in the project root:
+1. **Clone the repository:**
    ```bash
-   cp .env.example .env
+   git clone <repository-url>
+   cd scandinavian-furnitures
    ```
 
-   e. Update the `.env` file with your Firebase credentials:
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Set up Google OAuth Credentials:**
+
+   a. Go to [Google Cloud Console](https://console.cloud.google.com/)
+
+   b. Create a new project or select an existing one
+
+   c. Enable the Google+ API:
+      - Go to **APIs & Services** → **Library**
+      - Search for "Google+ API" and enable it
+
+   d. Create OAuth 2.0 credentials:
+      - Go to **APIs & Services** → **Credentials**
+      - Click **Create Credentials** → **OAuth client ID**
+      - Select **Web application**
+      - Add authorized JavaScript origins:
+        - `http://localhost:3000` (for development)
+        - Your production URL
+      - Add authorized redirect URIs:
+        - `http://localhost:3000/api/auth/callback/google` (development)
+        - `https://yourdomain.com/api/auth/callback/google` (production)
+      - Click **Create** and copy the Client ID and Client Secret
+
+4. **Configure environment variables:**
+   ```bash
+   cp .env.example .env.local
+   ```
+
+   Update `.env.local` with your credentials:
    ```env
-   VITE_FIREBASE_API_KEY=your_api_key_here
-   VITE_FIREBASE_AUTH_DOMAIN=your_project_id.firebaseapp.com
-   VITE_FIREBASE_PROJECT_ID=your_project_id
-   VITE_FIREBASE_STORAGE_BUCKET=your_project_id.appspot.com
-   VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-   VITE_FIREBASE_APP_ID=your_app_id
+   # Generate with: openssl rand -base64 32
+   AUTH_SECRET=your_generated_secret_here
+
+   # From Google Cloud Console
+   AUTH_GOOGLE_ID=your_google_client_id_here
+   AUTH_GOOGLE_SECRET=your_google_client_secret_here
+
+   # Application URL
+   NEXTAUTH_URL=http://localhost:3000
    ```
 
-4. Start the development server:
-```bash
-npm run dev
-```
+5. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
 
-The application will be available at `http://localhost:5000`
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-**Note**: You must sign in with a Google account to access the portfolio content.
+   **Note**: You must sign in with a Google account to access the portfolio content.
 
 ### Build for Production
 
-To create a production build:
-
 ```bash
 npm run build
+npm start
 ```
 
-The built files will be in the `dist/` directory.
+## Deployment to Vercel
 
-### Preview Production Build
+1. **Push your code to GitHub**
 
-To preview the production build locally:
+2. **Import to Vercel:**
+   - Go to [vercel.com](https://vercel.com)
+   - Click "New Project"
+   - Import your GitHub repository
+   - Vercel will automatically detect Next.js
 
-```bash
-npm run preview
-```
+3. **Configure Environment Variables:**
+   In Vercel dashboard, go to **Settings** → **Environment Variables** and add:
+   - `AUTH_SECRET` (generate with `openssl rand -base64 32`)
+   - `AUTH_GOOGLE_ID`
+   - `AUTH_GOOGLE_SECRET`
+   - `NEXTAUTH_URL` (your production URL, e.g., `https://yourdomain.vercel.app`)
+
+4. **Update Google OAuth redirect URIs:**
+   Add your Vercel URL to authorized redirect URIs in Google Cloud Console:
+   ```
+   https://yourdomain.vercel.app/api/auth/callback/google
+   ```
+
+5. **Deploy:**
+   Vercel will automatically deploy on every push to your main branch.
+
+## Authentication Flow
+
+1. Users visit the homepage and are redirected to `/signin` (protected by middleware)
+2. Click "Sign in with Google" to authenticate
+3. Google OAuth consent screen appears
+4. After successful authentication, users are redirected back to the homepage
+5. Header displays user profile with avatar and logout button
+6. Sessions persist across page refreshes using JWT
+7. Middleware protects all routes except `/signin`
 
 ## Customization
 
-### Updating Personal Information
+### Update Personal Information
 
-1. **Header**: Edit `src/components/Header.jsx` to update name and title
-2. **About**: Modify `src/components/About.jsx` for personal description
-3. **Skills**: Update skill categories in `src/components/Skills.jsx`
-4. **Experience**: Edit job history in `src/components/Experience.jsx`
-5. **Projects**: Modify project showcase in `src/components/Projects.jsx`
-6. **Contact**: Update contact links in `src/components/Contact.jsx`
+Edit the following components to customize content:
+
+- `components/Header.tsx` - Name and title
+- `components/About.tsx` - Personal description and highlights
+- `components/Skills.tsx` - Technical skills and categories
+- `components/Experience.tsx` - Work history and achievements
+- `components/Projects.tsx` - Featured projects
+- `components/Contact.tsx` - Contact information and social links
 
 ### Theme Customization
 
-Theme colors are defined in `src/index.css` using CSS custom properties. Modify the `:root[data-theme='light']` and `:root[data-theme='dark']` sections to customize colors.
+Theme colors are defined in `app/globals.css` using CSS custom properties. Modify the `:root` and `.dark` sections to customize the color scheme.
 
-## Authentication
+### Add More shadcn/ui Components
 
-This application uses **Firebase Authentication** with **Google Sign-In** to protect content.
+```bash
+npx shadcn@latest add [component-name]
+```
 
-### How It Works
+Available components: https://ui.shadcn.com/docs/components
 
-1. **Sign-In Page** (`/signin`): Users are presented with a Google Sign-In button
-2. **Protected Routes**: All portfolio content is protected and requires authentication
-3. **Authentication State**: Firebase manages user sessions automatically
-4. **User Profile**: The header displays the authenticated user's photo and name
-5. **Logout**: Users can sign out using the logout button in the header
+## Key Features Explained
 
-### Security Features
+### Server Components
+- Portfolio components are React Server Components for optimal performance
+- Reduces client-side JavaScript bundle size
+- Faster initial page loads
 
-- Firebase handles all authentication securely
-- No passwords are stored in the application
-- Sessions persist across page refreshes
-- Automatic redirect to sign-in for unauthenticated users
+### Middleware Protection
+- `middleware.ts` protects all routes automatically
+- Redirects unauthenticated users to `/signin`
+- Edge runtime for fast authentication checks
 
-## Sections
+### Type Safety
+- Full TypeScript coverage
+- Type-safe environment variables
+- Autocomplete and IntelliSense support
 
-### Sign-In Page
-- Clean, modern Google Sign-In interface
-- Automatic redirect to portfolio after successful authentication
-- Error handling for failed sign-in attempts
-
-### Header
-- Name and professional title
-- User profile with avatar (when authenticated)
-- Logout button
-- Navigation menu
-- Dark/Light mode toggle
-
-### About
-- Personal introduction
-- Key highlights (years of experience, projects, satisfaction rate)
-
-### Skills
-- Cloud & Infrastructure technologies
-- MLOps & DevOps tools
-- Programming languages and tools
-- ML & Data technologies
-
-### Experience
-- Timeline of professional positions
-- Job responsibilities and achievements
-- Interactive timeline design
-
-### Projects
-- Showcase of featured projects
-- Technology stack used
-- Project descriptions
-
-### Contact
-- Email, GitHub, LinkedIn, Twitter links
-- Professional contact information
+### Responsive Design
+- Mobile-first approach with Tailwind CSS
+- Breakpoints: sm, md, lg, xl, 2xl
+- Touch-optimized navigation
 
 ## Browser Support
 
@@ -218,4 +240,4 @@ This project is open source and available under the MIT License.
 
 ---
 
-Built with React + Vite
+Built with Next.js 15 + TypeScript + shadcn/ui + NextAuth.js
